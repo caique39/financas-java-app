@@ -4,9 +4,9 @@ API para projeto Java solicitado pelo professor de algoritmos e programação II
 
 # Dependências
 
-Um editor de texto ou IDE
-JDK 8+
-Maven 3+
+* Editor de texto ou IDE (aka VSCode)
+* [JDK 8+](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* [Maven 3+](http://maven.apache.org/)
 
 # Configuração
 
