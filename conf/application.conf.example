@@ -1,0 +1,9 @@
+# add or override properties
+# See https://github.com/typesafehub/config/blob/master/HOCON.md for more details
+
+
+db.url = "jdbc:mysql://localhost/<db>"
+db.user = "username"
+db.password = "password"
+db.cachePrepStmts = true
+
