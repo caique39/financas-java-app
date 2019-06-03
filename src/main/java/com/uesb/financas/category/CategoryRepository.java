@@ -17,10 +17,10 @@ public interface CategoryRepository {
    * List categories using start/max limits.
    *
    * @param start Start offset.
-   * @param max Max number of rows.
+   * @param max   Max number of rows.
    * @return Available categories.
    */
-  @SqlQuery("select * from categories limit :max offset :start and active = 1")
+  @SqlQuery("select * from categories where active = 1 limit :max offset :start")
   List<Category> list(int start, int max);
 
   /**

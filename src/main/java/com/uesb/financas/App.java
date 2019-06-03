@@ -23,7 +23,7 @@ public class App extends Jooby {
       .transactionPerRequest(
         new TransactionalRequest()
             .attach(CategoryRepository.class)
-    )
+      )
     );
 
     get(() -> "Seja bem vindo à API!");
