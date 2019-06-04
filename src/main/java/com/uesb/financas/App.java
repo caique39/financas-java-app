@@ -2,6 +2,8 @@ package com.uesb.financas;
 
 import com.uesb.financas.category.Categories;
 import com.uesb.financas.category.CategoryRepository;
+import com.uesb.financas.customer.Customers;
+import com.uesb.financas.customer.CustomerRepository;
 
 import org.jooby.Jooby;
 import org.jooby.jdbc.Jdbc;
@@ -22,14 +24,15 @@ public class App extends Jooby {
       })
       .transactionPerRequest(
         new TransactionalRequest()
-            .attach(CategoryRepository.class)
+            .attach(CategoryRepository.class).attach(CustomerRepository.class)
       )
+  
     );
 
     get(() -> "Seja bem vindo à API!");
 
     use(new Categories());
-    // use(new Customers());
+    use(new Customers());
     // use(new Orders());
     // use(new Products());
   }
