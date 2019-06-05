@@ -56,7 +56,7 @@ public interface CustomerRepository {
   /**
    * Update a customer and returns true if the customers was updated.
    *
-   * @param category Customer to update.
+   * @param customer Customer to update.
    * @return True if the customer was updated.
    */
   @SqlUpdate("update customers set name=:name, email=:email, phone=:phone where id=:id")
