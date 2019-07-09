@@ -1,5 +1,7 @@
 package com.uesb.financas.category;
 
+import com.uesb.financas.db.DbException;
+
 import org.jooby.Err;
 import org.jooby.Results;
 import org.jooby.Status;
@@ -10,61 +12,70 @@ public class Categories extends Jooby {
   {
     path("api/v1/categories", () -> {
       get((req) -> {
-        CategoryRepository db = require(CategoryRepository.class);
+        CategoryDao dao = CategoryFactory.createCategoryDao();
 
-        int start = req.param("start").intValue(0);
-        int max = req.param("max").intValue(20);
+        long start = req.param("start").longValue(0);
+        long max = req.param("max").longValue(20);
 
-        return db.list(start, max);
+        return dao.list(start, max);
       });
 
-      get("/:id", (req) ->  {
-        CategoryRepository db = require(CategoryRepository.class);
+      get("/:id", (req) -> {
+        CategoryDao dao = CategoryFactory.createCategoryDao();
 
         long id = req.param("id").longValue();
-        Category category = db.findById(id);
 
-        if (category == null) {
+        try {
+          Category category = dao.findById(id);
+
+          return category;
+        } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
-
-        return category;
       });
 
       post((req) -> {
-        CategoryRepository db = require(CategoryRepository.class);
+        CategoryDao dao = CategoryFactory.createCategoryDao();
         Category category = req.body(Category.class);
 
         if (category.getName() == null) {
           throw new Err(Status.NOT_FOUND);
         }
 
-        long id = db.insert(category);
+        try {
+          long id = dao.insert(category);
 
-        return new Category(id, category.getName());
+          return new Category(id, category.getName());
+        } catch (DbException e) {
+          throw new Err(Status.EXPECTATION_FAILED);
+        }
       });
 
       put((req) -> {
-        CategoryRepository db = require(CategoryRepository.class);
+        CategoryDao dao = CategoryFactory.createCategoryDao();
         Category category = req.body(Category.class);
 
-        if (!db.update(category)) {
+        try {
+          dao.update(category);
+
+          return Results.noContent();
+        } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
-
-        return category;
       });
 
       delete("/:id", (req) -> {
-        CategoryRepository db = require(CategoryRepository.class);
+        CategoryDao dao = CategoryFactory.createCategoryDao();
 
         long id = req.param("id").longValue();
 
-        if (!db.delete(id)) {
+        try {
+          dao.delete(id);
+
+          return Results.noContent();
+        } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
-
-        return Results.noContent();
       });
     });
   }
