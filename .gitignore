@@ -11,6 +11,8 @@ buildNumber.properties
 .vscode
 .settings
 .classpath
+
 # Credentials
 conf/application.conf
+db.properties
 
