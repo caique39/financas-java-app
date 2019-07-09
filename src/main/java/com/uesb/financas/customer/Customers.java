@@ -18,7 +18,7 @@ public class Customers extends Jooby {
         return db.list(start, max);
       });
 
-      get("/:id", (req) ->  {
+      get("/:id", (req) -> {
         CustomerRepository db = require(CustomerRepository.class);
 
         long id = req.param("id").longValue();
@@ -52,7 +52,7 @@ public class Customers extends Jooby {
           throw new Err(Status.NOT_FOUND);
         }
 
-        return customer;
+        return Results.noContent();
       });
 
       delete("/:id", (req) -> {

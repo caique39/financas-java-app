@@ -6,13 +6,13 @@ import org.jdbi.v3.core.statement.StatementContext;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Customer{
+public class Customer {
   public static class Mapper implements RowMapper<Customer> {
     @Override public Customer map(final ResultSet rs, final StatementContext ctx) throws SQLException {
       return new Customer(rs.getLong("id"), rs.getString("name"), rs.getString("email"), rs.getString("phone"));
     }
   }
-    
+
   private Long id;
   private String name;
   private String email;
@@ -39,7 +39,7 @@ public class Customer{
 
   public String getPhone() {
     return phone;
-  }  
+  }
 
 }
 
