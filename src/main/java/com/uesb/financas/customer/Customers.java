@@ -1,5 +1,7 @@
 package com.uesb.financas.customer;
 
+import com.uesb.financas.db.DbException;
+
 import org.jooby.Err;
 import org.jooby.Results;
 import org.jooby.Status;
@@ -10,61 +12,88 @@ public class Customers extends Jooby {
   {
     path("api/v1/customers", () -> {
       get((req) -> {
-        CustomerRepository db = require(CustomerRepository.class);
+        CustomerDao dao = CustomerFactory.createCustomerDao();
 
         int start = req.param("start").intValue(0);
         int max = req.param("max").intValue(20);
 
-        return db.list(start, max);
+        return dao.list(start, max);
       });
 
       get("/:id", (req) -> {
-        CustomerRepository db = require(CustomerRepository.class);
+        CustomerDao dao = CustomerFactory.createCustomerDao();
 
         long id = req.param("id").longValue();
-        Customer customer = db.findById(id);
 
-        if (customer == null) {
+        try {
+          Customer customer = dao.findById(id);
+
+          return customer;
+        } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
 
-        return customer;
+      });
+
+      get("/:email", (req) -> {
+        CustomerDao dao = CustomerFactory.createCustomerDao();
+
+        String email = req.param("email").value();
+
+        try {
+          Customer customer = dao.findByEmail(email);
+
+          return customer;
+        } catch (DbException e) {
+          throw new Err(Status.NOT_FOUND);
+        }
+
       });
 
       post((req) -> {
-        CustomerRepository db = require(CustomerRepository.class);
+        CustomerDao dao = CustomerFactory.createCustomerDao();
         Customer customer = req.body(Customer.class);
 
         if (customer.getName() == null) {
           throw new Err(Status.NOT_FOUND);
         }
 
-        long id = db.insert(customer);
+        try {
+          long id = dao.insert(customer);
 
-        return new Customer(id, customer.getName(), customer.getEmail(), customer.getPhone());
+          return new Customer(id, customer.getName(), customer.getEmail(), customer.getPhone());
+        } catch (DbException e) {
+          throw new Err(Status.EXPECTATION_FAILED);
+        }
+        
       });
 
       put((req) -> {
-        CustomerRepository db = require(CustomerRepository.class);
+        CustomerDao dao = CustomerFactory.createCustomerDao();
         Customer customer = req.body(Customer.class);
 
-        if (!db.update(customer)) {
+        try {
+          dao.update(customer);
+
+          return Results.noContent();
+        } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
 
-        return Results.noContent();
       });
 
       delete("/:id", (req) -> {
-        CustomerRepository db = require(CustomerRepository.class);
+        CustomerDao dao = CustomerFactory.createCustomerDao();
 
         long id = req.param("id").longValue();
 
-        if (!db.delete(id)) {
+        try {
+          dao.delete(id);
+
+          return Results.noContent();
+        } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
-
-        return Results.noContent();
       });
     });
   }
