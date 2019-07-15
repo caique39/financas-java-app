@@ -32,13 +32,12 @@ public class Customers extends Jooby {
         } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
-
       });
 
-      get("/:email", (req) -> {
+      get("/email/:id", (req) -> {
         CustomerDao dao = CustomerFactory.createCustomerDao();
 
-        String email = req.param("email").value();
+        String email = req.param("id").value();
 
         try {
           Customer customer = dao.findByEmail(email);
@@ -65,7 +64,7 @@ public class Customers extends Jooby {
         } catch (DbException e) {
           throw new Err(Status.EXPECTATION_FAILED);
         }
-        
+
       });
 
       put((req) -> {
