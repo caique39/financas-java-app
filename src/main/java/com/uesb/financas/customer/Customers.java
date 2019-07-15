@@ -46,7 +46,6 @@ public class Customers extends Jooby {
         } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
-
       });
 
       post((req) -> {

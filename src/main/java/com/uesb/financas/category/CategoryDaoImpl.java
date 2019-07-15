@@ -72,7 +72,7 @@ public class CategoryDaoImpl implements CategoryDao {
     PreparedStatement preSqlStatement = null;
 
     try {
-      preSqlStatement = conn.prepareStatement("UPDATE categories SET active = 0 WHERE id=?");
+      preSqlStatement = conn.prepareStatement("UPDATE categories SET active = 0 WHERE id = ?");
 
       preSqlStatement.setLong(1, id);
 

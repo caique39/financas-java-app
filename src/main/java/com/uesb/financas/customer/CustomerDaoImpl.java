@@ -90,7 +90,6 @@ public class CustomerDaoImpl implements CustomerDao {
     }
   }
 
-  
   public Customer findById(long id) {
     PreparedStatement preSqlStatement = null;
     ResultSet resultSet = null;
@@ -101,7 +100,8 @@ public class CustomerDaoImpl implements CustomerDao {
       resultSet = preSqlStatement.executeQuery();
 
       if (resultSet.next()) {
-        Customer customer = new Customer(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("email"), resultSet.getString("phone"));
+        Customer customer = new Customer(resultSet.getLong("id"), resultSet.getString("name"),
+            resultSet.getString("email"), resultSet.getString("phone"));
 
         return customer;
       }
@@ -120,13 +120,14 @@ public class CustomerDaoImpl implements CustomerDao {
     PreparedStatement preSqlStatement = null;
     ResultSet resultSet = null;
     try {
-      preSqlStatement = conn.prepareStatement("SELECT * FROM customers where email = ?");
+      preSqlStatement = conn.prepareStatement("SELECT * FROM customers WHERE email = ?");
       preSqlStatement.setString(1, email);
 
       resultSet = preSqlStatement.executeQuery();
 
       if (resultSet.next()) {
-        Customer customer = new Customer(resultSet.getLong("email"), resultSet.getString("name"), resultSet.getString("email"), resultSet.getString("phone"));
+        Customer customer = new Customer(resultSet.getLong("id"), resultSet.getString("name"),
+            resultSet.getString("email"), resultSet.getString("phone"));
 
         return customer;
       }
@@ -153,7 +154,8 @@ public class CustomerDaoImpl implements CustomerDao {
       List<Customer> customers = new ArrayList<>();
 
       while (resultSet.next()) {
-        Customer customer = new Customer(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("email"), resultSet.getString("phone"));
+        Customer customer = new Customer(resultSet.getLong("id"), resultSet.getString("name"),
+            resultSet.getString("email"), resultSet.getString("phone"));
         customers.add(customer);
       }
 
