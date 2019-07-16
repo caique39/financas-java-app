@@ -1,25 +1,13 @@
 package com.uesb.financas.sale.item;
 
-import org.jdbi.v3.core.mapper.RowMapper;
-import org.jdbi.v3.core.statement.StatementContext;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class SaleItem {
-  public static class Mapper implements RowMapper<SaleItem> {
-    @Override
-    public SaleItem map(final ResultSet rs, final StatementContext ctx) throws SQLException {
-      return new SaleItem(rs.getLong("id"), rs.getInt("sale_id"), rs.getInt("product_id"), rs.getInt("quantity"));
-    }
-  }
 
   private long id;
-  private int saleId;
-  private int productId;
+  private long saleId;
+  private long productId;
   private int quantity;
 
-  public SaleItem(long id, int saleId, int productId, int quantity) {
+  public SaleItem(long id, long saleId, long productId, int quantity) {
     this.id = id;
     this.saleId = saleId;
     this.productId = productId;
@@ -30,11 +18,11 @@ public class SaleItem {
     return id;
   }
 
-  public int getSaleId() {
+  public long getSaleId() {
     return saleId;
   }
 
-  public int getProductId() {
+  public long getProductId() {
     return productId;
   }
 
