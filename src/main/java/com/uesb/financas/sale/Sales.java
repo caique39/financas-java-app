@@ -1,45 +1,43 @@
 package com.uesb.financas.sale;
 
 import org.jooby.Err;
-import org.jooby.Results;
 import org.jooby.Status;
 import org.jooby.Jooby;
 
-import java.util.List;
-
+import com.uesb.financas.db.DbException;
 import com.uesb.financas.sale.SalesController;
-import com.uesb.financas.sale.item.SaleItem;
-import com.uesb.financas.sale.item.SaleItemRepository;
+
 
 public class Sales extends Jooby {
   {
     path("api/v1/sales", () -> {
-      // get((req) -> {
-      // CategoryRepository db = require(CategoryRepository.class);
+      get((req) -> {
+        SaleDao dao = SaleFactory.createSaleDao();
 
-      // int start = req.param("start").intValue(0);
-      // int max = req.param("max").intValue(20);
+        int start = req.param("start").intValue(0);
+        int max = req.param("max").intValue(20);
 
-      // return db.list(start, max);
-      // });
+        return dao.list(start, max);
+      });
 
-      get("/:id", (req) -> {
-        SaleRepository db = require(SaleRepository.class);
+      get("/:id", (req) ->  {
+        SaleDao dao = SaleFactory.createSaleDao();
 
         long id = req.param("id").longValue();
-        Sale sale = db.findById(id);
 
-        if (sale == null) {
+        try {
+          Sale sale = dao.findById(id);
+
+          return sale;
+        } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
-
-        return sale;
       });
 
       post("/", (req) -> {
         Sale sale = req.body(Sale.class);
-        SaleRepository db = require(SaleRepository.class);
-        SalesController saleController = new SalesController(db);
+        SaleDao dao = SaleFactory.createSaleDao();
+        SalesController saleController = new SalesController(dao);
 
         return saleController.create(sale);
       });

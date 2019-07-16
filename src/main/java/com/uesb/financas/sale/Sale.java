@@ -12,29 +12,19 @@ import java.util.ArrayList;
 import com.uesb.financas.sale.item.SaleItem;;
 
 public class Sale {
-  public static class Mapper implements RowMapper<Sale> {
-    @Override
-    public Sale map(final ResultSet rs, final StatementContext ctx) throws SQLException {
-      return new Sale(rs.getLong("id"), rs.getLong("customer_id"), rs.getLong("payment_method_id"),
-          rs.getDouble("gross_value"), rs.getDouble("net_value"), rs.getDouble("amount_paid"), rs.getDouble("discount"),
-          new ArrayList<SaleItem>());
-    }
-  }
 
   private long id;
   private long customerId;
-  private long paymentMethodId;
   private double grossAmount;
   private double netAmount;
   private double amountPaid;
   private double discount;
   private List<SaleItem> cart;
 
-  public Sale(long id, long customerId, long paymentMethodId, double grossAmount, double netAmount, double amountPaid,
+  public Sale(long id, long customerId, double grossAmount, double netAmount, double amountPaid,
       double discount, List<SaleItem> cart) {
     this.id = id;
     this.customerId = customerId;
-    this.paymentMethodId = paymentMethodId;
     this.grossAmount = grossAmount;
     this.netAmount = netAmount;
     this.amountPaid = amountPaid;
@@ -48,10 +38,6 @@ public class Sale {
 
   public long getCustomerId() {
     return customerId;
-  }
-
-  public long getPaymentMethodId() {
-    return paymentMethodId;
   }
 
   public double getGrossAmount() {
