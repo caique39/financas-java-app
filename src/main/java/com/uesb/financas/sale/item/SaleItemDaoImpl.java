@@ -3,6 +3,8 @@ package com.uesb.financas.sale.item;
 import com.uesb.financas.db.*;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Database access for sale items.
@@ -42,6 +44,31 @@ public class SaleItemDaoImpl implements SaleItemDao {
             throw new DbException(e.getMessage());
         } finally {
             DB.closeStatement(preSqlStatement);
+        }
+    }
+
+    public List<SaleItem> listBySaleId(long saleId) {
+        PreparedStatement preSqlStatement = null;
+        ResultSet resultSet = null;
+        try {
+          preSqlStatement = conn.prepareStatement("SELECT * FROM sales_items WHERE sale_id = ?");
+          preSqlStatement.setLong(1, saleId);
+    
+          resultSet = preSqlStatement.executeQuery();
+    
+          List<SaleItem> salesItems = new ArrayList<>();
+    
+          while (resultSet.next()) {
+            SaleItem saleItem = new SaleItem(resultSet.getLong("id"), resultSet.getLong("sale_id"), resultSet.getLong("product_id"), resultSet.getInt("quantity"));
+            salesItems.add(saleItem);
+          }
+    
+          return salesItems;
+        } catch (SQLException e) {
+          throw new DbException(e.getMessage());
+        } finally {
+          DB.closeStatement(preSqlStatement);
+          DB.closeResultSet(resultSet);
         }
     }
 

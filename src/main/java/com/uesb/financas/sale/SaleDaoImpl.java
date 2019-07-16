@@ -125,7 +125,7 @@ public class SaleDaoImpl implements SaleDao {
     PreparedStatement preSqlStatement = null;
     ResultSet resultSet = null;
     try {
-      preSqlStatement = conn.prepareStatement("SELECT * FROM sales where limit ? offset ?");
+      preSqlStatement = conn.prepareStatement("SELECT * FROM sales limit ? offset ?");
       preSqlStatement.setLong(1, max);
       preSqlStatement.setLong(2, start);
 

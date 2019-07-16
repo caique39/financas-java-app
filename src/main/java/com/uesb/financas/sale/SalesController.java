@@ -41,14 +41,16 @@ public class SalesController extends Jooby {
   public double getGrossAmount(List<SaleItem> cart) {
     ProductDao productDao = ProductFactory.createProductDao();
 
-    List<Object> prices = cart.stream().map(saleItem -> productDao.findById(saleItem.getId()))
+    List<Double> prices = cart.stream().map(saleItem -> productDao.findById(saleItem.getProductId()).getPrice() * saleItem.getQuantity())
         .collect(Collectors.toList());
 
-    for (Object price : prices) {
-      System.out.println(price);
+    
+    double total = 0.0;
+    for (Double price : prices) {
+      total = total + price;
     }
 
-    return 10;
+    return total;
   }
 
   public double getNetAmount(double grossAmount, double discount) {

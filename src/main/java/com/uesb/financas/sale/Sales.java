@@ -6,6 +6,9 @@ import org.jooby.Jooby;
 
 import com.uesb.financas.db.DbException;
 import com.uesb.financas.sale.SalesController;
+// import com.uesb.financas.sale.item.SaleItem;
+import com.uesb.financas.sale.item.SaleItemDao;
+import com.uesb.financas.sale.item.SaleItemFactory;
 
 
 public class Sales extends Jooby {
@@ -32,6 +35,15 @@ public class Sales extends Jooby {
         } catch (DbException e) {
           throw new Err(Status.NOT_FOUND);
         }
+      });
+
+      get("/items/:saleId", (req) ->  {
+        SaleItemDao dao = SaleItemFactory.createSaleItemDao();
+
+        long id = req.param("saleId").longValue();
+
+        return dao.listBySaleId(id);
+
       });
 
       post("/", (req) -> {
